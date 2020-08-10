@@ -62,30 +62,33 @@ public class TestScript {
 				String findBy = row.getCell(1) == null ? "" : row.getCell(1).getStringCellValue();
 				String name = row.getCell(2).getStringCellValue();
 				String customInput = row.getCell(3) == null ? "" : df.formatCellValue(row.getCell(3));
+				String execute = row.getCell(4).getStringCellValue();
 				if (findBy == "" && !command.equals("Open")) {
 					throw new Exception("Findby column must not be empty (Empty value found at Row "+(x+1)+", Cell 2");
 				}
 				if (customInput == "" && (command.equals("Open"))) {
 					throw new Exception("Input column must not be empty (Empty value found at Row "+(x+1)+", Cell 4");
 				}
-				switch (command) {
-					case "Open":
-						driver = new AutomationDriver(name);
-						driver.getDriver().get(customInput);
-						break;
-					case "Input":
-						WebAppTesting.inputTextField(driver.getDriver(), findBy, name, customInput);
-						break;
-					case "Click":
-						WebAppTesting.clickButton(driver.getDriver(), findBy, name);
-						break;
-					case "Mouse Hover":
-						WebAppTesting.mouseHover(driver.getDriver(), findBy, name);
-						break;
-					case "Select Dropdown":
-						WebAppTesting.selectDropdown(driver.getDriver(), findBy, name, customInput);
-						break;
-				}				
+				if (execute.equals("Yes")) {
+					switch (command) {
+						case "Open":
+							driver = new AutomationDriver(name);
+							driver.getDriver().get(customInput);
+							break;
+						case "Input":
+							WebAppTesting.inputTextField(driver.getDriver(), findBy, name, customInput);
+							break;
+						case "Click":
+							WebAppTesting.clickButton(driver.getDriver(), findBy, name);
+							break;
+						case "Mouse Hover":
+							WebAppTesting.mouseHover(driver.getDriver(), findBy, name);
+							break;
+						case "Select Dropdown":
+							WebAppTesting.selectDropdown(driver.getDriver(), findBy, name, customInput);
+							break;
+					}		
+				}		
 			} 
 			if (driver != null) {
 				driver.getDriver().quit();

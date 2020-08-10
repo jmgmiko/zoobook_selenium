@@ -41,7 +41,20 @@ public class WebAppTesting {
 	
 	public static void inputTextField(WebDriver driver, String findBy, String name, String input) {
 		WebElement element = retrieveElement(driver, findBy, name);
-		element.sendKeys(input);
+		element.clear();
+		if (findBy.equals("id") || findBy.equals("name")) {
+			JavascriptExecutor executor = (JavascriptExecutor)driver;
+			switch (findBy) {
+				case "id":
+					executor.executeScript("document.getElementById('"+name+"').value='"+input+"';");
+					break;
+				case "name":
+					executor.executeScript("document.getElementsByName('"+name+"')[0].value='"+input+"';");
+					break;
+			}
+		} else {
+			element.sendKeys(input);
+		}
 	}
 	
 	public static void clickButton(WebDriver driver, String findBy, String name) {
