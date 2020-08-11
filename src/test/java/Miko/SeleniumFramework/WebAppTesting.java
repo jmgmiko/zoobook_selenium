@@ -39,39 +39,72 @@ public class WebAppTesting {
 		return element;
 	}
 	
-	public static void inputTextField(WebDriver driver, String findBy, String name, String input) {
+	public static boolean inputTextField(WebDriver driver, String findBy, String name, String input) {
+		boolean result = false;
 		WebElement element = retrieveElement(driver, findBy, name);
-		element.clear();
-		if (findBy.equals("id") || findBy.equals("name")) {
+		if (element != null) {
 			JavascriptExecutor executor = (JavascriptExecutor)driver;
-			switch (findBy) {
-				case "id":
-					executor.executeScript("document.getElementById('"+name+"').value='"+input+"';");
-					break;
-				case "name":
-					executor.executeScript("document.getElementsByName('"+name+"')[0].value='"+input+"';");
-					break;
+			element.clear();
+			if (findBy.equals("id") || findBy.equals("name")) {
+				switch (findBy) {
+					case "id":
+						executor.executeScript("document.getElementById('"+name+"').value='"+input+"';");
+						break;
+					case "name":
+						executor.executeScript("document.getElementsByName('"+name+"')[0].value='"+input+"';");
+						break;
+				}
+			} else {
+				element.sendKeys(input);
 			}
-		} else {
-			element.sendKeys(input);
+			if (executor.executeScript("return arguments[0].value", element).toString().equals(input)) {
+				result = true;
+			}
 		}
+		return result;
 	}
 	
-	public static void clickButton(WebDriver driver, String findBy, String name) {
+	public static boolean clickButton(WebDriver driver, String findBy, String name) {
+		boolean result = false;
 		WebElement element = retrieveElement(driver, findBy, name);
-		JavascriptExecutor executor = (JavascriptExecutor)driver;
-		executor.executeScript("arguments[0].click();", element);
+		if (element != null) {
+			JavascriptExecutor executor = (JavascriptExecutor)driver;
+			executor.executeScript("arguments[0].click();", element);
+			result = true;
+		}
+		return result;
 	}
 	
-	public static void mouseHover(WebDriver driver, String findBy, String name) {
+	public static boolean mouseHover(WebDriver driver, String findBy, String name) {
+		boolean result = false;
 		Actions actions = new Actions(driver);
 		WebElement element = retrieveElement(driver, findBy, name);
-		actions.moveToElement(element).perform();
+		if (element != null) {
+			actions.moveToElement(element).perform();
+			result = true;
+		}
+		return result;
 	}
 	
-	public static void selectDropdown(WebDriver driver, String findBy, String name, String input) {
+	public static boolean selectDropdown(WebDriver driver, String findBy, String name, String input) {
+		boolean result = false;
 		WebElement element = retrieveElement(driver, findBy, name);
-		Select dropdown = new Select(element);
-		dropdown.selectByVisibleText(input);
+		if (element != null) {
+			Select dropdown = new Select(element);
+			dropdown.selectByVisibleText(input);
+			if (dropdown.getFirstSelectedOption().getText().equals(input)) {
+				result = true;
+			}
+		} 		
+		return result;
+	}
+	
+	public static boolean checkIfElementExists(WebDriver driver, String findBy, String name, String input) {
+		boolean result = false;
+		WebElement element = retrieveElement(driver, findBy, name);
+		if ((element == null && input.equalsIgnoreCase("false")) || (element != null && input.equalsIgnoreCase("true"))) {
+			result = true;
+		}
+		return result;
 	}
 }

@@ -11,9 +11,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;  
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;  
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;  
 
 public class TestScript {
@@ -45,11 +48,19 @@ public class TestScript {
 	
 	public void readTestScript() throws Exception {
 		try {
+			boolean result = false;
 			DataFormatter df = new DataFormatter();
 			AutomationDriver driver = null;
 			FileInputStream fis = new FileInputStream(this.fileName); 
 			XSSFWorkbook wb = new XSSFWorkbook(fis);
-			XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object  
+			XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object
+			CellStyle failStyle = wb.createCellStyle();
+			CellStyle passStyle = wb.createCellStyle();
+	        Font font = wb.createFont();
+	        font.setColor(HSSFColor.GREEN.index);
+	        passStyle.setFont(font);
+	        font.setColor(HSSFColor.RED.index);
+	        failStyle.setFont(font);
 			for (int x=1; x<=sheet.getLastRowNum(); x++)                 
 			{  
 				Row row = sheet.getRow(x);
@@ -69,25 +80,39 @@ public class TestScript {
 				if (customInput == "" && (command.equals("Open"))) {
 					throw new Exception("Input column must not be empty (Empty value found at Row "+(x+1)+", Cell 4");
 				}
+				if (execute.equals("No") && command.equals("Open")) {
+					throw new Exception("Open command must be executed");
+				}
 				if (execute.equals("Yes")) {
 					switch (command) {
 						case "Open":
 							driver = new AutomationDriver(name);
 							driver.getDriver().get(customInput);
+							result = true;
 							break;
 						case "Input":
-							WebAppTesting.inputTextField(driver.getDriver(), findBy, name, customInput);
+							result = WebAppTesting.inputTextField(driver.getDriver(), findBy, name, customInput);
 							break;
 						case "Click":
-							WebAppTesting.clickButton(driver.getDriver(), findBy, name);
+							result = WebAppTesting.clickButton(driver.getDriver(), findBy, name);
 							break;
 						case "Mouse Hover":
-							WebAppTesting.mouseHover(driver.getDriver(), findBy, name);
+							result = WebAppTesting.mouseHover(driver.getDriver(), findBy, name);
 							break;
 						case "Select Dropdown":
-							WebAppTesting.selectDropdown(driver.getDriver(), findBy, name, customInput);
+							result = WebAppTesting.selectDropdown(driver.getDriver(), findBy, name, customInput);
 							break;
-					}		
+						case "Check If Exists":
+							result = WebAppTesting.checkIfElementExists(driver.getDriver(), findBy, name, customInput);
+							break;
+					}
+					if (result == true) {
+						row.getCell(5).setCellValue("PASS");
+						//row.getCell(5).setCellStyle(passStyle);
+					} else {
+						row.getCell(5).setCellValue("FAIL");
+						//row.getCell(5).setCellStyle(failStyle);
+					}
 				}		
 			} 
 			if (driver != null) {
