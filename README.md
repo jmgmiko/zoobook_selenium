@@ -5,7 +5,7 @@ Automated testing framework for Zoobook's EMR which is written in Java and uses 
 This framework is fed by an Excel file which contains 2 sheets:
 
 ##### Steps
-This sheet contains all of the necessary steps for the framework to follow through. Inside, there is a table with 4 columns:
+This sheet contains all of the necessary steps for the framework to follow through. Inside, there is a table with 5 columns:
 
 - Command
   - It contains any of the framework's various commands.
@@ -17,6 +17,8 @@ This sheet contains all of the necessary steps for the framework to follow throu
   - It contains the input of a particular command.
 - Execute?
   - It determines whether the step will be executed or not.
+- Status (Pass/Fail)
+  - It determines the status of the step whether it passes or fails.
 
 ##### Dropdown
 It houses the dropdown values of the following columns from the **Steps** column: 
@@ -24,6 +26,7 @@ It houses the dropdown values of the following columns from the **Steps** column
 - Command
 - FindBy
 - Execute
+- Check If Exists
 
 ### The Commands of the Framework
 Here is the list of the framework's commands:
@@ -63,4 +66,12 @@ It selects an item from a dropdown list.
 - FindBy **(Needed)**
 - Name **(Needed)** 
 - Custom Input **(Needed)**
+- Execute (Optional)
+
+##### Check If Exists
+It determines whether the given element exists or not.
+- FindBy **(Needed)**
+- Name **(Needed)** 
+- Custom Input **(Needed)**
+  - Value must be **True** or **False**.
 - Execute (Optional)
