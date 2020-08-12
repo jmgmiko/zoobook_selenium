@@ -3,6 +3,7 @@ package Miko.SeleniumFramework;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -56,11 +57,14 @@ public class TestScript {
 			XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object
 			CellStyle failStyle = wb.createCellStyle();
 			CellStyle passStyle = wb.createCellStyle();
-	        Font font = wb.createFont();
-	        font.setColor(HSSFColor.GREEN.index);
-	        passStyle.setFont(font);
-	        font.setColor(HSSFColor.RED.index);
-	        failStyle.setFont(font);
+	        Font passFont = wb.createFont();
+	        Font failFont = wb.createFont();
+	        passFont.setBold(true);
+	        failFont.setBold(true);
+	        passFont.setColor(HSSFColor.GREEN.index);
+	        passStyle.setFont(passFont);
+	        failFont.setColor(HSSFColor.RED.index);
+	        failStyle.setFont(failFont);	   
 			for (int x=1; x<=sheet.getLastRowNum(); x++)                 
 			{  
 				Row row = sheet.getRow(x);
@@ -74,6 +78,7 @@ public class TestScript {
 				String name = row.getCell(2).getStringCellValue();
 				String customInput = row.getCell(3) == null ? "" : df.formatCellValue(row.getCell(3));
 				String execute = row.getCell(4).getStringCellValue();
+				Cell status = row.getCell(5);
 				if (findBy == "" && !command.equals("Open")) {
 					throw new Exception("Findby column must not be empty (Empty value found at Row "+(x+1)+", Cell 2");
 				}
@@ -106,15 +111,21 @@ public class TestScript {
 							result = WebAppTesting.checkIfElementExists(driver.getDriver(), findBy, name, customInput);
 							break;
 					}
+					
 					if (result == true) {
-						row.getCell(5).setCellValue("PASS");
-						//row.getCell(5).setCellStyle(passStyle);
+						status.setCellValue("PASS");
+						status.setCellStyle(passStyle);
 					} else {
-						row.getCell(5).setCellValue("FAIL");
-						//row.getCell(5).setCellStyle(failStyle);
+						status.setCellValue("FAIL");
+						status.setCellStyle(failStyle);
 					}
 				}		
-			} 
+			}
+			fis.close();
+			FileOutputStream fos = new FileOutputStream(this.fileName);
+			wb.write(fos);
+			fos.close();
+			wb.close();
 			if (driver != null) {
 				driver.getDriver().quit();
 			}

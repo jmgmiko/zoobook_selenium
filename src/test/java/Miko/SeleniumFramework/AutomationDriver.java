@@ -1,5 +1,7 @@
 package Miko.SeleniumFramework;
 
+import java.io.File;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -12,7 +14,8 @@ public class AutomationDriver {
 	private WebDriver driver;
   
 	public AutomationDriver(String name) {
-		String driverPath = "C:\\Users\\UESR\\Documents\\eclipse_workspace\\SeleniumFramework\\drivers\\";
+		File currentDir = new File("");
+		String driverPath = currentDir.getAbsolutePath()+"\\drivers\\";
 		System.setProperty("webdriver.gecko.driver", driverPath+"geckodriver.exe");
 		System.setProperty("webdriver.chrome.driver", driverPath+"chromedriver.exe");
 		System.setProperty("webdriver.ie.driver", driverPath+"IEDriverServer.exe");
