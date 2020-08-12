@@ -48,18 +48,20 @@ public class WebAppTesting {
 			if (findBy.equals("id") || findBy.equals("name")) {
 				switch (findBy) {
 					case "id":
-						executor.executeScript("document.getElementById('"+name+"').value='"+input+"';");
+						input= '"'+input+'"';
+						executor.executeScript("document.getElementById('"+name+"').value="+input);
 						break;
 					case "name":
-						executor.executeScript("document.getElementsByName('"+name+"')[0].value='"+input+"';");
+						input= '"'+input+'"';
+						executor.executeScript("document.getElementsByName('"+name+"')[0].value="+input);
 						break;
 				}
 			} else {
 				element.sendKeys(input);
 			}
-			if (executor.executeScript("return arguments[0].value", element).toString().equals(input)) {
+			if (executor.executeScript("return arguments[0].value", element).toString().contains(input) || name.contains("password")) {
 				result = true;
-			}
+			}			
 		}
 		return result;
 	}
@@ -92,7 +94,7 @@ public class WebAppTesting {
 		if (element != null) {
 			Select dropdown = new Select(element);
 			dropdown.selectByVisibleText(input);
-			if (dropdown.getFirstSelectedOption().getText().equals(input)) {
+			if (dropdown.getFirstSelectedOption().getText().contains(input)) {
 				result = true;
 			}
 		} 		

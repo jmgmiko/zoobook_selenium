@@ -1,10 +1,12 @@
 package Miko.SeleniumFramework;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileLock;
 import java.util.Iterator;
 
 import javax.swing.JFileChooser;
@@ -32,7 +34,7 @@ public class TestScript {
                 "Excel files", "xlsx");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
         	this.fileName = chooser.getSelectedFile();
         } else {
         	this.fileName = null;
@@ -47,24 +49,25 @@ public class TestScript {
 		this.fileName = fileName;
 	}
 	
+	public CellStyle setStatus(XSSFWorkbook wb, short color) {
+		CellStyle givenCell = wb.createCellStyle();
+		Font givenFont = wb.createFont();
+		givenFont.setBold(true);
+		givenFont.setColor(color);
+		givenCell.setFont(givenFont);
+		return givenCell;
+	}
+	
 	public void readTestScript() throws Exception {
 		try {
 			boolean result = false;
 			DataFormatter df = new DataFormatter();
 			AutomationDriver driver = null;
-			FileInputStream fis = new FileInputStream(this.fileName); 
+			FileInputStream fis = new FileInputStream(this.fileName); 		
 			XSSFWorkbook wb = new XSSFWorkbook(fis);
-			XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object
-			CellStyle failStyle = wb.createCellStyle();
-			CellStyle passStyle = wb.createCellStyle();
-	        Font passFont = wb.createFont();
-	        Font failFont = wb.createFont();
-	        passFont.setBold(true);
-	        failFont.setBold(true);
-	        passFont.setColor(HSSFColor.GREEN.index);
-	        passStyle.setFont(passFont);
-	        failFont.setColor(HSSFColor.RED.index);
-	        failStyle.setFont(failFont);	   
+			XSSFSheet sheet = wb.getSheet("Steps");     
+			CellStyle failStyle = setStatus(wb, HSSFColor.RED.index);
+			CellStyle passStyle = setStatus(wb, HSSFColor.GREEN.index);
 			for (int x=1; x<=sheet.getLastRowNum(); x++)                 
 			{  
 				Row row = sheet.getRow(x);
@@ -79,6 +82,9 @@ public class TestScript {
 				String customInput = row.getCell(3) == null ? "" : df.formatCellValue(row.getCell(3));
 				String execute = row.getCell(4).getStringCellValue();
 				Cell status = row.getCell(5);
+				if (status == null) {
+					status = row.createCell(5);
+				}
 				if (findBy == "" && !command.equals("Open")) {
 					throw new Exception("Findby column must not be empty (Empty value found at Row "+(x+1)+", Cell 2");
 				}
@@ -115,11 +121,13 @@ public class TestScript {
 					if (result == true) {
 						status.setCellValue("PASS");
 						status.setCellStyle(passStyle);
-					} else {
+					} else if (result == false) {
 						status.setCellValue("FAIL");
 						status.setCellStyle(failStyle);
-					}
-				}		
+					} 
+				} else {
+					status.setCellValue("");
+				}
 			}
 			fis.close();
 			FileOutputStream fos = new FileOutputStream(this.fileName);
@@ -129,6 +137,7 @@ public class TestScript {
 			if (driver != null) {
 				driver.getDriver().quit();
 			}
+			Desktop.getDesktop().open(this.fileName);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
