@@ -116,6 +116,12 @@ public class TestScript {
 						case "Check If Exists":
 							result = WebAppTesting.checkIfElementExists(driver.getDriver(), findBy, name, customInput);
 							break;
+						case "Check If Element Contains":
+							result = WebAppTesting.checkIfElementContains(driver.getDriver(), findBy, name, customInput);
+							break;
+						case "Check If Displayed":
+							result = WebAppTesting.checkIfElementIsDisplayed(driver.getDriver(), findBy, name);
+							break;
 					}
 					
 					if (result == true) {

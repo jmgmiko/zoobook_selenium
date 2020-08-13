@@ -48,12 +48,10 @@ public class WebAppTesting {
 			if (findBy.equals("id") || findBy.equals("name")) {
 				switch (findBy) {
 					case "id":
-						input= '"'+input+'"';
-						executor.executeScript("document.getElementById('"+name+"').value="+input);
+						executor.executeScript("document.getElementById('"+name+"').value="+'"'+input+'"');
 						break;
 					case "name":
-						input= '"'+input+'"';
-						executor.executeScript("document.getElementsByName('"+name+"')[0].value="+input);
+						executor.executeScript("document.getElementsByName('"+name+"')[0].value="+'"'+input+'"');
 						break;
 				}
 			} else {
@@ -105,6 +103,24 @@ public class WebAppTesting {
 		boolean result = false;
 		WebElement element = retrieveElement(driver, findBy, name);
 		if ((element == null && input.equalsIgnoreCase("false")) || (element != null && input.equalsIgnoreCase("true"))) {
+			result = true;
+		}
+		return result;
+	}
+	
+	public static boolean checkIfElementContains(WebDriver driver, String findBy, String name, String input) {
+		boolean result = false;
+		WebElement element = retrieveElement(driver, findBy, name);
+		if (element.getText().contains(input)) {
+			result = true;
+		}
+		return result;
+	}
+	
+	public static boolean checkIfElementIsDisplayed(WebDriver driver, String findBy, String name) {
+		boolean result = false;
+		WebElement element = retrieveElement(driver, findBy, name);
+		if (element.isDisplayed()) {
 			result = true;
 		}
 		return result;
