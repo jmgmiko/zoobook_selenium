@@ -1,5 +1,5 @@
 # zoobook_selenium
-Automated testing framework for Zoobook's EMR which is written in Java and uses TestNG
+Automated testing framework for Zoobook's EMR that implements Selenium. It is written in Java and uses TestNG.
 
 ### The Input of the Testing Framework
 This framework is fed by an Excel file which contains 2 sheets:
