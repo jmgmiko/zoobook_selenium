@@ -27,6 +27,8 @@ It houses the dropdown values of the following columns from the **Steps** column
 - FindBy
 - Execute
 - Check If Exists
+- Check If Element Contains
+- Check If Displayed
 
 ### The Commands of the Framework
 Here is the list of the framework's commands:
@@ -74,4 +76,18 @@ It determines whether the given element exists or not.
 - Name **(Needed)** 
 - Custom Input **(Needed)**
   - Value must be **True** or **False**.
+- Execute (Optional)
+
+##### Check If Element Contains
+It checks whether the given element contains a value.
+- FindBy **(Needed)**
+- Name **(Needed)** 
+- Custom Input **(Needed)**
+- Execute (Optional)
+
+##### Check If Displayed
+It verifies if the given element is displayed.
+- FindBy **(Needed)**
+- Name **(Needed)** 
+- Custom Input (Not Used)
 - Execute (Optional)
