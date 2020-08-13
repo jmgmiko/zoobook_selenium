@@ -136,6 +136,7 @@ public class TestScript {
 				}
 			}
 			fis.close();
+			System.out.println("Test script execution complete");
 			FileOutputStream fos = new FileOutputStream(this.fileName);
 			wb.write(fos);
 			fos.close();
@@ -143,6 +144,7 @@ public class TestScript {
 			if (driver != null) {
 				driver.getDriver().quit();
 			}
+			System.out.println("Opening the test script in Excel...");
 			Desktop.getDesktop().open(this.fileName);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
