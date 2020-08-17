@@ -63,7 +63,7 @@ public class TestScript {
 			boolean result = false;
 			DataFormatter df = new DataFormatter();
 			AutomationDriver driver = null;
-			FileInputStream fis = new FileInputStream(this.fileName); 		
+			FileInputStream fis = new FileInputStream(this.fileName); 	
 			XSSFWorkbook wb = new XSSFWorkbook(fis);
 			XSSFSheet sheet = wb.getSheet("Steps");     
 			CellStyle failStyle = setStatus(wb, HSSFColor.RED.index);
@@ -131,6 +131,7 @@ public class TestScript {
 						status.setCellValue("FAIL");
 						status.setCellStyle(failStyle);
 					} 
+					SnapshotClass.takeSnapShot(driver.getDriver(), this.fileName.getName().replaceFirst("[.][^.]+$", ""), x);				
 				} else {
 					status.setCellValue("");
 				}
