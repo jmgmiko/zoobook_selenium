@@ -5,8 +5,10 @@ Automated testing framework for Zoobook's EMR that implements Selenium. It is wr
 This framework is fed by an Excel file which contains 2 sheets:
 
 ##### Steps
-This sheet contains all of the necessary steps for the framework to follow through. Inside, there is a table with 5 columns:
+This sheet contains all of the necessary steps for the framework to follow through. Inside, there is a table with 7 columns:
 
+- Step
+  - It indicates the number of a particular step in order.
 - Command
   - It contains any of the framework's various commands.
 - FindBy
@@ -29,6 +31,11 @@ It houses the dropdown values of the following columns from the **Steps** column
 - Check If Exists
 - Check If Element Contains
 - Check If Displayed
+- Check If Element Not Contains
+- Change Tab
+
+### Output
+After each executed step, a snapshot is captured and saved in a folder named after the test script, which is saved in the following directory: **C:\SeleniumFramework_Snapshots**
 
 ### The Commands of the Framework
 Here is the list of the framework's commands:
@@ -90,4 +97,19 @@ It verifies if the given element is displayed.
 - FindBy **(Needed)**
 - Name **(Needed)** 
 - Custom Input (Not Used)
+- Execute (Optional)
+
+##### Check If Element Not Contains
+It checks whether the given element doesn't contain a value.
+- FindBy **(Needed)**
+- Name **(Needed)** 
+- Custom Input **(Needed)**
+- Execute (Optional)
+
+##### Change Tab
+It switches to a particular tab.
+- FindBy (Not Used)
+- Name (Not Used) 
+- Custom Input **(Needed)**
+  - Contains the tab number in order of visibility from left to right
 - Execute (Optional)
