@@ -2,12 +2,12 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2020-08-17T23:18:49 PST" name="Default suite" finished-at="2020-08-17T23:21:59 PST" duration-ms="190768">
+  <suite started-at="2020-08-18T01:50:58 PST" name="Default suite" finished-at="2020-08-18T01:52:47 PST" duration-ms="108332">
     <groups>
     </groups>
-    <test started-at="2020-08-17T23:18:49 PST" name="Default test" finished-at="2020-08-17T23:21:59 PST" duration-ms="190768">
+    <test started-at="2020-08-18T01:50:58 PST" name="Default test" finished-at="2020-08-18T01:52:47 PST" duration-ms="108332">
       <class name="Miko.SeleniumFramework.MainTest">
-        <test-method signature="wholeTest()[pri:0, instance:Miko.SeleniumFramework.MainTest@7adda9cc]" started-at="2020-08-17T23:18:49 PST" name="wholeTest" finished-at="2020-08-17T23:21:59 PST" duration-ms="190203" status="PASS">
+        <test-method signature="wholeTest()[pri:0, instance:Miko.SeleniumFramework.MainTest@433d61fb]" started-at="2020-08-18T01:50:58 PST" name="wholeTest" finished-at="2020-08-18T01:52:46 PST" duration-ms="108104" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- wholeTest -->

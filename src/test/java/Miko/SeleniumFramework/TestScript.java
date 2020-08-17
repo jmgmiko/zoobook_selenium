@@ -71,21 +71,22 @@ public class TestScript {
 			for (int x=1; x<=sheet.getLastRowNum(); x++)                 
 			{  
 				Row row = sheet.getRow(x);
-				if (row.getCell(0) == null) {
-					throw new Exception("Command column must not be empty (Empty value found at Row "+(x+1)+", Cell 1");
-				} else if (row.getCell(2) == null) {
-					throw new Exception("Name column must not be empty (Empty value found at Row "+(x+1)+", Cell 3");
+				if (row.getCell(1) == null) {
+					throw new Exception("Command column must not be empty (Empty value found at Row "+(x+1)+", Cell 2");
+				} 
+				if (row.getCell(3) == null && !row.getCell(1).getStringCellValue().equals("Change Tab")) {
+					throw new Exception("Name column must not be empty (Empty value found at Row "+(x+1)+", Cell 4");
 				}
-				String command = row.getCell(0).getStringCellValue();
-				String findBy = row.getCell(1) == null ? "" : row.getCell(1).getStringCellValue();
-				String name = row.getCell(2).getStringCellValue();
-				String customInput = row.getCell(3) == null ? "" : df.formatCellValue(row.getCell(3));
-				String execute = row.getCell(4).getStringCellValue();
-				Cell status = row.getCell(5);
+				String command = row.getCell(1).getStringCellValue();
+				String findBy = row.getCell(2) == null ? "" : row.getCell(2).getStringCellValue();
+				String name = row.getCell(3) == null ? "" : row.getCell(3).getStringCellValue();
+				String customInput = row.getCell(4) == null ? "" : df.formatCellValue(row.getCell(4));
+				String execute = row.getCell(5).getStringCellValue();
+				Cell status = row.getCell(6);
 				if (status == null) {
-					status = row.createCell(5);
+					status = row.createCell(6);
 				}
-				if (findBy == "" && !command.equals("Open")) {
+				if (findBy == "" && !(command.equals("Open") || command.equals("Change Tab"))) {
 					throw new Exception("Findby column must not be empty (Empty value found at Row "+(x+1)+", Cell 2");
 				}
 				if (customInput == "" && (command.equals("Open"))) {
@@ -121,6 +122,12 @@ public class TestScript {
 							break;
 						case "Check If Displayed":
 							result = WebAppTesting.checkIfElementIsDisplayed(driver.getDriver(), findBy, name);
+							break;
+						case "Check If Element Not Contains":
+							result = WebAppTesting.checkIfElementNotContains(driver.getDriver(), findBy, name, customInput);
+							break;
+						case "Change Tab":
+							result = WebAppTesting.changeTab(driver.getDriver(), customInput);
 							break;
 					}
 					

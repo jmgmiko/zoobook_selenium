@@ -1,7 +1,10 @@
 package Miko.SeleniumFramework;
 
+import java.util.ArrayList;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -121,6 +124,28 @@ public class WebAppTesting {
 		boolean result = false;
 		WebElement element = retrieveElement(driver, findBy, name);
 		if (element.isDisplayed()) {
+			result = true;
+		}
+		return result;
+	}
+	
+	public static boolean checkIfElementNotContains(WebDriver driver, String findBy, String name, String input) {
+		boolean result = false;
+		WebElement element = retrieveElement(driver, findBy, name);
+		if (element.getText().contains(input) == false) {
+			result = true;
+		}
+		return result;
+	}
+	
+	public static boolean changeTab(WebDriver driver, String input) {
+		boolean result = false;
+		int current = Integer.parseInt(input)-1;
+		ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+		driver.switchTo().window(tabs.get(current));
+		String currentTab = driver.getWindowHandle();
+		int index = tabs.indexOf(currentTab);
+		if (current == index) {
 			result = true;
 		}
 		return result;
